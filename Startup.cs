@@ -3,9 +3,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NReco.Logging.File;
+using w10_assignment_ksteph.Models.UI.Menus;
 using W9_assignment_template.Data;
 using W9_assignment_template.Helpers;
-using W9_assignment_template.Services;
+using w10_assignment_ksteph.FileIO;
+using w10_assignment_ksteph.Models.UI.Character;
+using w10_assignment_ksteph.Models.UI.Menus.InteractiveMenus;
+using w10_assignment_ksteph.Models.UI;
+using w10_assignment_ksteph.Models.Units.Abstracts;
+using w10_assignment_ksteph.Services;
+using w10_assignment_ksteph.Data;
 
 namespace W9_assignment_template;
 
@@ -38,13 +45,35 @@ public static class Startup
         // Register DbContext with dependency injection
         services.AddDbContext<GameContext>(options =>
             options
-                .UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+                .UseSqlServer(configuration.GetConnectionString("DbConnection"))
                 .UseLazyLoadingProxies()
         );
 
 
         // Register your services
-        services.AddTransient<GameEngine>();
-        services.AddTransient<Menu>();
+        services.AddTransient<CharacterUtilities>();
+        services.AddTransient<CharacterUI>();
+        services.AddTransient<CombatHandler>();
+        services.AddTransient<CommandHandler>();
+        services.AddTransient<CommandMenu>();
+        services.AddTransient<DungeonFactory>();
+        services.AddTransient<ExitMenu>();
+        services.AddSingleton<FileManager<Unit>>();
+        services.AddDbContext<GameContext>(options => options
+        .UseSqlServer(configuration.GetConnectionString("DbConnection"))
+        .UseLazyLoadingProxies());
+        services.AddTransient<InventoryMenu>();
+        services.AddTransient<ItemCommandMenu>();
+        services.AddTransient<LevelUpMenu>();
+        services.AddTransient<MainMenu>();
+        services.AddTransient<RoomFactory>();
+        services.AddTransient<RoomMenu>();
+        services.AddTransient<RoomNavigationMenu>();
+        services.AddTransient<RoomUI>();
+        services.AddTransient<SeedHandler>();
+        services.AddSingleton<UnitClassMenu>();
+        services.AddSingleton<UnitManager>();
+        services.AddTransient<UnitSelectionMenu>();
+        services.AddTransient<UserInterface>();
     }
 }

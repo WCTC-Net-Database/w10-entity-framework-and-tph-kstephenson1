@@ -1,19 +1,46 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using w10_assignment_ksteph.Data;
+using w10_assignment_ksteph.Models.UI;
+using w10_assignment_ksteph.Services;
+using W9_assignment_template;
 using W9_assignment_template.Data;
-using W9_assignment_template.Services;
 
-namespace W9_assignment_template;
+namespace w10_assignment_ksteph;
 
-public static class Program
+class Program
 {
-    private static void Main(string[] args)
+    static void Main()
     {
-        var serviceCollection = new ServiceCollection();
+        ServiceCollection serviceCollection = new ServiceCollection();
         Startup.ConfigureServices(serviceCollection);
+        
 
-        var serviceProvider = serviceCollection.BuildServiceProvider();
+        ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
-        var gameEngine = serviceProvider.GetService<GameEngine>();
-        gameEngine?.Run();
+        GameContext db = provider.GetRequiredService<GameContext>();
+        SeedHandler seedHandler = provider.GetRequiredService<SeedHandler>();
+        UserInterface userInterface = provider.GetRequiredService<UserInterface>();
+        DungeonFactory dungeonFactory = provider.GetRequiredService<DungeonFactory>();
+
+        GameEngine engine = new GameEngine(db, seedHandler, userInterface, dungeonFactory);
+        engine.StartGameEngine();
     }
 }
+
+/*
+
+
+
+
+        
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ */
