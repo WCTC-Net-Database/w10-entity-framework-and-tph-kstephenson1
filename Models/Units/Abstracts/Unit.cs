@@ -5,6 +5,7 @@ using CsvHelper.Configuration.Attributes;
 using w10_assignment_ksteph.FileIO.Csv.Converters;
 using w10_assignment_ksteph.Models.Abilities;
 using w10_assignment_ksteph.Models.Combat;
+using w10_assignment_ksteph.Models.Commands.AbilityCommands;
 using w10_assignment_ksteph.Models.Commands.Invokers;
 using w10_assignment_ksteph.Models.Commands.ItemCommands;
 using w10_assignment_ksteph.Models.Commands.UnitCommands;
@@ -211,9 +212,9 @@ public abstract class Unit : IUnit, ITargetable, IAttack, IHaveInventory
         Invoker.ExecuteCommand(UseItemCommand);
     }
 
-    public void UseAbility(Ability ability)
+    public void UseAbility(IUnit target, Ability ability)
     {
-        AbilityCommand = new(this, ability);
+        AbilityCommand = new(this, target, ability);
         Invoker.ExecuteCommand(AbilityCommand);
     }
 

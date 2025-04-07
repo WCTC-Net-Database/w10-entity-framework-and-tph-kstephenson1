@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using w10_assignment_ksteph.Models.Abilities;
 using w10_assignment_ksteph.Models.Combat;
 using w10_assignment_ksteph.Models.Dungeons;
 using w10_assignment_ksteph.Models.Inventories;
@@ -20,6 +21,7 @@ public class GameContext : DbContext
     public DbSet<Stat> Stats { get; set; }
     public DbSet<Inventory> Inventories { get; set; }
     public DbSet<Item> Items { get; set; }
+    public DbSet<Item> Abilities { get; set; }
     public GameContext() { }
     public GameContext(DbContextOptions<GameContext> options) : base(options) { }
 
@@ -49,5 +51,10 @@ public class GameContext : DbContext
 
             .HasValue<MagicWeaponItem>(nameof(MagicWeaponItem))
             .HasValue<WeaponItem>(nameof(WeaponItem));
+
+        builder.Entity<Ability>()
+            .HasDiscriminator(ability => ability.AbilityType)
+            .HasValue<FlyAbility>(nameof(FlyAbility))
+            .HasValue<HealAbility>(nameof(HealAbility));
     }
 }

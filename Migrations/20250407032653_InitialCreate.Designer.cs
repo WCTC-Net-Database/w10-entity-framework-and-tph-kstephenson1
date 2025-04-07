@@ -11,7 +11,7 @@ using W9_assignment_template.Data;
 namespace w10_assignment_ksteph.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20250405040518_InitialCreate")]
+    [Migration("20250407032653_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,7 +24,52 @@ namespace w10_assignment_ksteph.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Combat.Stat", b =>
+            modelBuilder.Entity("AbilityUnit", b =>
+                {
+                    b.Property<int>("AbilitiesAbilityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitsUnitId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AbilitiesAbilityId", "UnitsUnitId");
+
+                    b.HasIndex("UnitsUnitId");
+
+                    b.ToTable("AbilityUnit");
+                });
+
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Abilities.Ability", b =>
+                {
+                    b.Property<int>("AbilityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AbilityId"));
+
+                    b.Property<string>("AbilityType")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AbilityId");
+
+                    b.ToTable("Ability");
+
+                    b.HasDiscriminator<string>("AbilityType").HasValue("Ability");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Combat.Stat", b =>
                 {
                     b.Property<int>("UnitId")
                         .HasColumnType("int");
@@ -67,7 +112,7 @@ namespace w10_assignment_ksteph.Migrations
                     b.ToTable("Stats");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Dungeons.Dungeon", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Dungeons.Dungeon", b =>
                 {
                     b.Property<int>("DungeonId")
                         .ValueGeneratedOnAdd()
@@ -93,7 +138,7 @@ namespace w10_assignment_ksteph.Migrations
                     b.ToTable("Dungeons");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Inventories.Inventory", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Inventories.Inventory", b =>
                 {
                     b.Property<int>("InventoryId")
                         .ValueGeneratedOnAdd()
@@ -114,7 +159,7 @@ namespace w10_assignment_ksteph.Migrations
                     b.HasAnnotation("Relational:JsonPropertyName", "Inventory");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.Item", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.Item", b =>
                 {
                     b.Property<int>("ItemId")
                         .ValueGeneratedOnAdd()
@@ -142,14 +187,14 @@ namespace w10_assignment_ksteph.Migrations
 
                     b.HasIndex("InventoryId");
 
-                    b.ToTable("Items");
+                    b.ToTable("Item");
 
                     b.HasDiscriminator<string>("ItemType").HasValue("Item");
 
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Rooms.Room", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Rooms.Room", b =>
                 {
                     b.Property<int>("RoomId")
                         .ValueGeneratedOnAdd()
@@ -170,7 +215,7 @@ namespace w10_assignment_ksteph.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Abstracts.Unit", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Abstracts.Unit", b =>
                 {
                     b.Property<int>("UnitId")
                         .ValueGeneratedOnAdd()
@@ -208,9 +253,23 @@ namespace w10_assignment_ksteph.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.ConsumableItems.ItemBook", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Abilities.FlyAbility", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Items.Item");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Abilities.Ability");
+
+                    b.HasDiscriminator().HasValue("FlyAbility");
+                });
+
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Abilities.HealAbility", b =>
+                {
+                    b.HasBaseType("w10_assignment_ksteph.Models.Abilities.Ability");
+
+                    b.HasDiscriminator().HasValue("HealAbility");
+                });
+
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.ConsumableItems.ItemBook", b =>
+                {
+                    b.HasBaseType("w10_assignment_ksteph.Models.Items.Item");
 
                     b.Property<int>("MaxUses")
                         .ValueGeneratedOnUpdateSometimes()
@@ -223,9 +282,9 @@ namespace w10_assignment_ksteph.Migrations
                     b.HasDiscriminator().HasValue("ItemBook");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.ConsumableItems.ItemLockpick", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.ConsumableItems.ItemLockpick", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Items.Item");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Items.Item");
 
                     b.Property<int>("MaxUses")
                         .ValueGeneratedOnUpdateSometimes()
@@ -238,9 +297,9 @@ namespace w10_assignment_ksteph.Migrations
                     b.HasDiscriminator().HasValue("ItemLockpick");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.ConsumableItems.ItemPotion", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.ConsumableItems.ItemPotion", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Items.Item");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Items.Item");
 
                     b.Property<int>("MaxUses")
                         .ValueGeneratedOnUpdateSometimes()
@@ -253,16 +312,16 @@ namespace w10_assignment_ksteph.Migrations
                     b.HasDiscriminator().HasValue("ItemPotion");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.GenericItem", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.GenericItem", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Items.Item");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Items.Item");
 
                     b.HasDiscriminator().HasValue("GenericItem");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.WeaponItems.MagicWeaponItem", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.WeaponItems.MagicWeaponItem", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Items.Item");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Items.Item");
 
                     b.Property<int>("Crit")
                         .ValueGeneratedOnUpdateSometimes()
@@ -307,9 +366,9 @@ namespace w10_assignment_ksteph.Migrations
                     b.HasDiscriminator().HasValue("MagicWeaponItem");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.WeaponItems.WeaponItem", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.WeaponItems.WeaponItem", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Items.Item");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Items.Item");
 
                     b.Property<int>("Crit")
                         .ValueGeneratedOnUpdateSometimes()
@@ -354,90 +413,105 @@ namespace w10_assignment_ksteph.Migrations
                     b.HasDiscriminator().HasValue("WeaponItem");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Characters.Cleric", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Characters.Cleric", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("Cleric");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Characters.Fighter", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Characters.Fighter", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("Fighter");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Characters.Knight", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Characters.Knight", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("Knight");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Characters.Rogue", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Characters.Rogue", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("Rogue");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Characters.Wizard", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Characters.Wizard", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("Wizard");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Monsters.EnemyArcher", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Monsters.EnemyArcher", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("EnemyArcher");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Monsters.EnemyCleric", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Monsters.EnemyCleric", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("EnemyCleric");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Monsters.EnemyGhost", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Monsters.EnemyGhost", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("EnemyGhost");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Monsters.EnemyGoblin", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Monsters.EnemyGoblin", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("EnemyGoblin");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Monsters.EnemyMage", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Monsters.EnemyMage", b =>
                 {
-                    b.HasBaseType("w9_assignment_ksteph.Models.Units.Abstracts.Unit");
+                    b.HasBaseType("w10_assignment_ksteph.Models.Units.Abstracts.Unit");
 
                     b.HasDiscriminator().HasValue("EnemyMage");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Combat.Stat", b =>
+            modelBuilder.Entity("AbilityUnit", b =>
                 {
-                    b.HasOne("w9_assignment_ksteph.Models.Units.Abstracts.Unit", "Unit")
+                    b.HasOne("w10_assignment_ksteph.Models.Abilities.Ability", null)
+                        .WithMany()
+                        .HasForeignKey("AbilitiesAbilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("w10_assignment_ksteph.Models.Units.Abstracts.Unit", null)
+                        .WithMany()
+                        .HasForeignKey("UnitsUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Combat.Stat", b =>
+                {
+                    b.HasOne("w10_assignment_ksteph.Models.Units.Abstracts.Unit", "Unit")
                         .WithOne("Stat")
-                        .HasForeignKey("w9_assignment_ksteph.Models.Combat.Stat", "UnitId")
+                        .HasForeignKey("w10_assignment_ksteph.Models.Combat.Stat", "UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Unit");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Dungeons.Dungeon", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Dungeons.Dungeon", b =>
                 {
-                    b.HasOne("w9_assignment_ksteph.Models.Rooms.Room", "StartingRoom")
+                    b.HasOne("w10_assignment_ksteph.Models.Rooms.Room", "StartingRoom")
                         .WithMany()
                         .HasForeignKey("StartingRoomRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -446,18 +520,18 @@ namespace w10_assignment_ksteph.Migrations
                     b.Navigation("StartingRoom");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Inventories.Inventory", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Inventories.Inventory", b =>
                 {
-                    b.HasOne("w9_assignment_ksteph.Models.Units.Abstracts.Unit", null)
+                    b.HasOne("w10_assignment_ksteph.Models.Units.Abstracts.Unit", null)
                         .WithOne("Inventory")
-                        .HasForeignKey("w9_assignment_ksteph.Models.Inventories.Inventory", "UnitId")
+                        .HasForeignKey("w10_assignment_ksteph.Models.Inventories.Inventory", "UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Items.Item", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Items.Item", b =>
                 {
-                    b.HasOne("w9_assignment_ksteph.Models.Inventories.Inventory", "Inventory")
+                    b.HasOne("w10_assignment_ksteph.Models.Inventories.Inventory", "Inventory")
                         .WithMany("Items")
                         .HasForeignKey("InventoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -466,26 +540,26 @@ namespace w10_assignment_ksteph.Migrations
                     b.Navigation("Inventory");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Abstracts.Unit", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Abstracts.Unit", b =>
                 {
-                    b.HasOne("w9_assignment_ksteph.Models.Rooms.Room", "CurrentRoom")
+                    b.HasOne("w10_assignment_ksteph.Models.Rooms.Room", "CurrentRoom")
                         .WithMany("Units")
                         .HasForeignKey("CurrentRoomRoomId");
 
                     b.Navigation("CurrentRoom");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Inventories.Inventory", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Inventories.Inventory", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Rooms.Room", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Rooms.Room", b =>
                 {
                     b.Navigation("Units");
                 });
 
-            modelBuilder.Entity("w9_assignment_ksteph.Models.Units.Abstracts.Unit", b =>
+            modelBuilder.Entity("w10_assignment_ksteph.Models.Units.Abstracts.Unit", b =>
                 {
                     b.Navigation("Inventory")
                         .IsRequired();

@@ -35,13 +35,19 @@ public class GameEngine
     {
         List<Unit> units = _db.Units.ToList();
         Unit unit = units.FirstOrDefault();
+        unit.Stat = new();
         units.Remove(unit);
         Unit unit2 = units.FirstOrDefault();
-        Ability ability = new("AbilityTest", "Testing the ability");
-        unit.Abilities.Add(ability);
-        unit.UseAbility(ability);
+        unit2.Stat = new();
+        units.Remove(unit2);
+        Ability heal = new HealAbility();
+        Ability taunt = new TauntAbility();
+        unit.Abilities.Add(heal);
+        unit2.Abilities.Add(taunt);
+        unit.UseAbility(unit2, heal);
         //unit.Attack(unit2);
-        unit2.UseAbility(ability);
+        unit2.UseAbility(unit, heal);
+        unit2.UseAbility(unit, taunt);
     }
 
     public void Initialization()

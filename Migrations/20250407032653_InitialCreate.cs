@@ -11,6 +11,21 @@ namespace w10_assignment_ksteph.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Ability",
+                columns: table => new
+                {
+                    AbilityId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AbilityType = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ability", x => x.AbilityId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Rooms",
                 columns: table => new
                 {
@@ -68,6 +83,30 @@ namespace w10_assignment_ksteph.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbilityUnit",
+                columns: table => new
+                {
+                    AbilitiesAbilityId = table.Column<int>(type: "int", nullable: false),
+                    UnitsUnitId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbilityUnit", x => new { x.AbilitiesAbilityId, x.UnitsUnitId });
+                    table.ForeignKey(
+                        name: "FK_AbilityUnit_Ability_AbilitiesAbilityId",
+                        column: x => x.AbilitiesAbilityId,
+                        principalTable: "Ability",
+                        principalColumn: "AbilityId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AbilityUnit_Units_UnitsUnitId",
+                        column: x => x.UnitsUnitId,
+                        principalTable: "Units",
+                        principalColumn: "UnitId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Inventories",
                 columns: table => new
                 {
@@ -115,7 +154,7 @@ namespace w10_assignment_ksteph.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Items",
+                name: "Item",
                 columns: table => new
                 {
                     ItemId = table.Column<int>(type: "int", nullable: false)
@@ -139,14 +178,19 @@ namespace w10_assignment_ksteph.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Items", x => x.ItemId);
+                    table.PrimaryKey("PK_Item", x => x.ItemId);
                     table.ForeignKey(
-                        name: "FK_Items_Inventories_InventoryId",
+                        name: "FK_Item_Inventories_InventoryId",
                         column: x => x.InventoryId,
                         principalTable: "Inventories",
                         principalColumn: "InventoryId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbilityUnit_UnitsUnitId",
+                table: "AbilityUnit",
+                column: "UnitsUnitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dungeons_StartingRoomRoomId",
@@ -160,8 +204,8 @@ namespace w10_assignment_ksteph.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_InventoryId",
-                table: "Items",
+                name: "IX_Item_InventoryId",
+                table: "Item",
                 column: "InventoryId");
 
             migrationBuilder.CreateIndex(
@@ -174,13 +218,19 @@ namespace w10_assignment_ksteph.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AbilityUnit");
+
+            migrationBuilder.DropTable(
                 name: "Dungeons");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "Item");
 
             migrationBuilder.DropTable(
                 name: "Stats");
+
+            migrationBuilder.DropTable(
+                name: "Ability");
 
             migrationBuilder.DropTable(
                 name: "Inventories");

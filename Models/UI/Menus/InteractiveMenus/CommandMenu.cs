@@ -65,10 +65,8 @@ public class CommandMenu : InteractiveSelectionMenu<ICommand>
         if (unit is IAttack)
             AddMenuItem("Attack", "Attacks a target unit.", new AttackCommand(null!, null!));
 
-        if (unit is IHeal)
-            AddMenuItem("Heal", "Heals a target unit.", new HealCommand(null!, null!));
 
-        if (unit is IHeal || unit is ICastable)
+        if (unit is ICastable)
             AddMenuItem("Cast", "Casts a spell.", new CastCommand(null!, "null"));
 
         AddMenuItem(exitMessage, "", null!);

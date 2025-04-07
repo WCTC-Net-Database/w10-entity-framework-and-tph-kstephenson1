@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using CsvHelper.Configuration.Attributes;
 using w10_assignment_ksteph.Models.Combat;
 using w10_assignment_ksteph.Models.Commands.UnitCommands;
-using w10_assignment_ksteph.Models.Interfaces;
 using w10_assignment_ksteph.Models.Interfaces.UnitClasses;
 using w10_assignment_ksteph.Models.Inventories;
 using w10_assignment_ksteph.Models.Units.Abstracts;
@@ -26,18 +25,8 @@ public class EnemyCleric : Monster, ICleric
     [Ignore]
     [JsonIgnore]
     [NotMapped]
-    public virtual HealCommand HealCommand { get; set; } = null!;
-
-    [Ignore]
-    [JsonIgnore]
-    [NotMapped]
     public virtual CastCommand CastCommand { get; set; } = null!;
 
-    public void Heal(IUnit target)
-    {
-        HealCommand = new(this, target);
-        Invoker.ExecuteCommand(HealCommand);
-    }
     public void Cast(string spellName)
     {
         CastCommand = new(this, spellName);

@@ -1,4 +1,5 @@
-﻿using w10_assignment_ksteph.Models.Commands.ItemCommands;
+﻿using w10_assignment_ksteph.Models.Commands.AbilityCommands;
+using w10_assignment_ksteph.Models.Commands.ItemCommands;
 using w10_assignment_ksteph.Models.Commands.UnitCommands;
 using w10_assignment_ksteph.Models.Interfaces;
 using w10_assignment_ksteph.Models.Interfaces.Commands;
@@ -78,15 +79,6 @@ public class CommandHandler
                 {
                     unit.Attack(targetUnit);
                 }
-            }
-        }
-        // If the unit is able to heal, it heals.
-        else if (command.GetType() == typeof(HealCommand))
-        {
-            IUnit targetUnit = _userInterface.UnitSelectionMenu.Display($"Select unit being healed by {unit.Name}", "[[Go Back]]");
-            if (targetUnit != null)
-            {
-                ((IHeal)unit).Heal(targetUnit);
             }
         }
         // If the unit is able to cast spells, it casts a spell.

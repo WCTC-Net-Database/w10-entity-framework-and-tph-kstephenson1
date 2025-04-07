@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using w10_assignment_ksteph.Models.Combat;
 using w10_assignment_ksteph.Models.Commands.UnitCommands;
-using w10_assignment_ksteph.Models.Interfaces;
 using w10_assignment_ksteph.Models.Interfaces.UnitClasses;
 using w10_assignment_ksteph.Models.Inventories;
 using w10_assignment_ksteph.Models.Units.Abstracts;
@@ -16,7 +15,7 @@ public class Cleric : Character, ICleric
 
     public Cleric()
     {
-
+        
     }
     public Cleric(string name, string characterClass, int level, Inventory inventory, Stat stats)
     {
@@ -31,18 +30,7 @@ public class Cleric : Character, ICleric
     [Ignore]
     [JsonIgnore]
     [NotMapped]
-    public virtual HealCommand HealCommand { get; set; } = null!;
-
-    [Ignore]
-    [JsonIgnore]
-    [NotMapped]
     public virtual CastCommand CastCommand { get; set; } = null!;
-
-    public void Heal(IUnit target)
-    {
-        HealCommand = new(this, target);
-        Invoker.ExecuteCommand(HealCommand);
-    }
 
     public void Cast(string spellName)
     {
