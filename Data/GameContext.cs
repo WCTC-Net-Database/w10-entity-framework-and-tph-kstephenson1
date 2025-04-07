@@ -21,7 +21,7 @@ public class GameContext : DbContext
     public DbSet<Stat> Stats { get; set; }
     public DbSet<Inventory> Inventories { get; set; }
     public DbSet<Item> Items { get; set; }
-    public DbSet<Item> Abilities { get; set; }
+    public DbSet<Ability> Abilities { get; set; }
     public GameContext() { }
     public GameContext(DbContextOptions<GameContext> options) : base(options) { }
 

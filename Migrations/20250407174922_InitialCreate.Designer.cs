@@ -11,7 +11,7 @@ using W9_assignment_template.Data;
 namespace w10_assignment_ksteph.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20250407032653_InitialCreate")]
+    [Migration("20250407174922_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace w10_assignment_ksteph.Migrations
 
                     b.HasKey("AbilityId");
 
-                    b.ToTable("Ability");
+                    b.ToTable("Abilities");
 
                     b.HasDiscriminator<string>("AbilityType").HasValue("Ability");
 
@@ -187,7 +187,7 @@ namespace w10_assignment_ksteph.Migrations
 
                     b.HasIndex("InventoryId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Items");
 
                     b.HasDiscriminator<string>("ItemType").HasValue("Item");
 

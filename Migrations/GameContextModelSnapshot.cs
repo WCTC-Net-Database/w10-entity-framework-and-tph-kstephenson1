@@ -59,7 +59,7 @@ namespace w10_assignment_ksteph.Migrations
 
                     b.HasKey("AbilityId");
 
-                    b.ToTable("Ability");
+                    b.ToTable("Abilities");
 
                     b.HasDiscriminator<string>("AbilityType").HasValue("Ability");
 
@@ -184,7 +184,7 @@ namespace w10_assignment_ksteph.Migrations
 
                     b.HasIndex("InventoryId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Items");
 
                     b.HasDiscriminator<string>("ItemType").HasValue("Item");
 

@@ -1,4 +1,5 @@
 ﻿using w10_assignment_ksteph.DataTypes;
+using w10_assignment_ksteph.Models.Abilities;
 using w10_assignment_ksteph.Models.Dungeons;
 using w10_assignment_ksteph.Models.Items;
 using w10_assignment_ksteph.Models.Items.WeaponItems;
@@ -61,26 +62,48 @@ public class SeedHandler
         {
             foreach (Character unit in _unitManager.Characters.Units)
             {
-                _db.Units.Add(unit);
-                _db.Stats.Add(unit.Stat);
-                _db.Inventories.Add(unit.Inventory);
-                foreach (Item item in unit.Inventory.Items)
-                {
-                    _db.Items.Add(item);
-                }
+                AddToDb(unit);
             }
             foreach (Monster unit in _unitManager.Monsters.Units)
             {
-                _db.Units.Add(unit);
-                _db.Stats.Add(unit.Stat);
-                _db.Inventories.Add(unit.Inventory);
-                foreach (Item item in unit.Inventory.Items)
-                {
-                    _db.Items.Add(item);
-                }
+                AddToDb(unit);
             }
-
         }
         _db.SaveChanges();
+    }
+
+    private void AddToDb(Unit unit)
+    {
+        _db.Units.Add(unit);
+        _db.Stats.Add(unit.Stat);
+        _db.Inventories.Add(unit.Inventory);
+        foreach (Item item in unit.Inventory.Items)
+        {
+            _db.Items.Add(item);
+        }
+        switch (unit.UnitType)
+        {
+            case "EnemyGhost":
+                Ability ability = new FlyAbility();
+                unit.Abilities.Add(ability);
+                _db.Abilities.Add(ability);
+                break;
+            case "Cleric" or "EnemyCleric":
+                ability = new HealAbility();
+                unit.Abilities.Add(ability);
+                _db.Abilities.Add(ability);
+                break;
+            case "EnemyGoblin" or "Knight":
+                ability = new TauntAbility();
+                unit.Abilities.Add(ability);
+                _db.Abilities.Add(ability);
+                break;
+            case "Rogue":
+                ability = new StealAbility();
+                unit.Abilities.Add(ability);
+                _db.Abilities.Add(ability);
+                break;
+
+        }
     }
 }
