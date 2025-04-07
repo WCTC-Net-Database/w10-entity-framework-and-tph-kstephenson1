@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using w10_assignment_ksteph.Models.Combat;
 using w10_assignment_ksteph.Models.Interfaces;
+using w10_assignment_ksteph.Models.Items;
 using w10_assignment_ksteph.Models.Units.Abstracts;
 using W9_assignment_template.Data;
 
@@ -17,13 +18,31 @@ public class CharacterUI
 
     public void DisplayCharacterInfo(IUnit unit) // Displays the character's info
     {
+        List<Unit> unitList = [(Unit)unit];
+        DisplayCharacterInfo(unitList);
+    }
+
+    public void DisplayCharacterInfo(List<Unit> units)
+    {
+        List<Stat> stats = _db.Stats.ToList();
+        List<Item> items = _db.Items.ToList();
+
+        foreach(Unit unit in units)
+        {
+            Stat stat = stats.Where(s => s.UnitId == unit.UnitId).FirstOrDefault();
+            List<Item> unitItems = items.Where(s => s.InventoryId == unit.Inventory.InventoryId).ToList();
+            DisplayCharacterInfo(unit, stat, unitItems);
+        }
+    }
+
+    public void DisplayCharacterInfo(IUnit unit, Stat stat, List<Item> items) // Displays the character's info
+    {
         // Builds a character table with 2 lines: Name, Level and Class.
         Grid charTable = new Grid().Width(30).AddColumn();
         charTable
             .AddRow(new Text(unit.Name).Centered())
                 .AddRow(new Text($"Level {unit.Level} {unit.Class}").Centered());
 
-        Stat stat = _db.Stats.FirstOrDefault(s => s.UnitId == unit.UnitId);
         // Builds an hp table that contains the health of the character
         Grid hpTable = new Grid().Width(25).AddColumn();
         hpTable
@@ -51,13 +70,10 @@ public class CharacterUI
         Grid invTable = new Grid();
         invTable.AddColumn();
 
-        Unit dbUnit = _db.Units.FirstOrDefault(u => u.UnitId == unit.UnitId);
-
-
         //Inventory inventory = _db.Inventories.FirstOrDefault(i => i.UnitId == unit.UnitId);
-        var items = from i in _db.Items
-                    where i.InventoryId == unit.Inventory.InventoryId
-                    select i;
+        //var items = from i in _db.Items
+        //            where i.InventoryId == unit.Inventory.InventoryId
+        //            select i;
 
         if (items.Count() != 0)
         {

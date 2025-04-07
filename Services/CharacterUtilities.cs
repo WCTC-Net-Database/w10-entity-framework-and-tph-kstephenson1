@@ -236,9 +236,6 @@ public class CharacterUtilities
         Console.Clear();
         List<Unit> units = _db.Units.ToList();
 
-        foreach (Unit unit in units)
-        {
-            _characterUI.DisplayCharacterInfo(unit);
-        }
+        _characterUI.DisplayCharacterInfo(units);
     }
 }
