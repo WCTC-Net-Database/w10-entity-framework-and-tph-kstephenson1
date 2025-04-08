@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore;
 using w10_assignment_ksteph.Models.Abilities;
 using w10_assignment_ksteph.Models.Combat;
 using w10_assignment_ksteph.Models.Dungeons;
@@ -55,6 +56,13 @@ public class GameContext : DbContext
         builder.Entity<Ability>()
             .HasDiscriminator(ability => ability.AbilityType)
             .HasValue<FlyAbility>(nameof(FlyAbility))
-            .HasValue<HealAbility>(nameof(HealAbility));
+            .HasValue<HealAbility>(nameof(HealAbility))
+            .HasValue<StealAbility>(nameof(StealAbility))
+            .HasValue<TauntAbility>(nameof(TauntAbility));
+
+        builder.Entity<Unit>()
+        .HasMany(l => l.Abilities)
+        .WithMany(r => r.Units)
+        .UsingEntity(j => j.ToTable("UnitAbility"));
     }
 }
