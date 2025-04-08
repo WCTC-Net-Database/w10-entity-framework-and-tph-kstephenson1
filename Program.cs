@@ -20,9 +20,8 @@ class Program
         GameContext db = provider.GetRequiredService<GameContext>();
         SeedHandler seedHandler = provider.GetRequiredService<SeedHandler>();
         UserInterface userInterface = provider.GetRequiredService<UserInterface>();
-        DungeonFactory dungeonFactory = provider.GetRequiredService<DungeonFactory>();
 
-        GameEngine engine = new GameEngine(db, seedHandler, userInterface, dungeonFactory);
+        GameEngine engine = new GameEngine(db, seedHandler, userInterface);
         engine.StartGameEngine();
     }
 }

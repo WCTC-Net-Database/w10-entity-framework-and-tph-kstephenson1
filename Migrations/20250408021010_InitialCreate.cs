@@ -83,30 +83,6 @@ namespace w10_assignment_ksteph.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbilityUnit",
-                columns: table => new
-                {
-                    AbilitiesAbilityId = table.Column<int>(type: "int", nullable: false),
-                    UnitsUnitId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbilityUnit", x => new { x.AbilitiesAbilityId, x.UnitsUnitId });
-                    table.ForeignKey(
-                        name: "FK_AbilityUnit_Abilities_AbilitiesAbilityId",
-                        column: x => x.AbilitiesAbilityId,
-                        principalTable: "Abilities",
-                        principalColumn: "AbilityId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AbilityUnit_Units_UnitsUnitId",
-                        column: x => x.UnitsUnitId,
-                        principalTable: "Units",
-                        principalColumn: "UnitId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Inventories",
                 columns: table => new
                 {
@@ -154,6 +130,30 @@ namespace w10_assignment_ksteph.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UnitAbility",
+                columns: table => new
+                {
+                    AbilitiesAbilityId = table.Column<int>(type: "int", nullable: false),
+                    UnitsUnitId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UnitAbility", x => new { x.AbilitiesAbilityId, x.UnitsUnitId });
+                    table.ForeignKey(
+                        name: "FK_UnitAbility_Abilities_AbilitiesAbilityId",
+                        column: x => x.AbilitiesAbilityId,
+                        principalTable: "Abilities",
+                        principalColumn: "AbilityId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UnitAbility_Units_UnitsUnitId",
+                        column: x => x.UnitsUnitId,
+                        principalTable: "Units",
+                        principalColumn: "UnitId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
@@ -188,11 +188,6 @@ namespace w10_assignment_ksteph.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbilityUnit_UnitsUnitId",
-                table: "AbilityUnit",
-                column: "UnitsUnitId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Dungeons_StartingRoomRoomId",
                 table: "Dungeons",
                 column: "StartingRoomRoomId");
@@ -209,6 +204,11 @@ namespace w10_assignment_ksteph.Migrations
                 column: "InventoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UnitAbility_UnitsUnitId",
+                table: "UnitAbility",
+                column: "UnitsUnitId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Units_CurrentRoomRoomId",
                 table: "Units",
                 column: "CurrentRoomRoomId");
@@ -217,9 +217,6 @@ namespace w10_assignment_ksteph.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AbilityUnit");
-
             migrationBuilder.DropTable(
                 name: "Dungeons");
 
@@ -230,10 +227,13 @@ namespace w10_assignment_ksteph.Migrations
                 name: "Stats");
 
             migrationBuilder.DropTable(
-                name: "Abilities");
+                name: "UnitAbility");
 
             migrationBuilder.DropTable(
                 name: "Inventories");
+
+            migrationBuilder.DropTable(
+                name: "Abilities");
 
             migrationBuilder.DropTable(
                 name: "Units");

@@ -11,7 +11,7 @@ using W9_assignment_template.Data;
 namespace w10_assignment_ksteph.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20250407174922_InitialCreate")]
+    [Migration("20250408021010_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace w10_assignment_ksteph.Migrations
 
                     b.HasIndex("UnitsUnitId");
 
-                    b.ToTable("AbilityUnit");
+                    b.ToTable("UnitAbility", (string)null);
                 });
 
             modelBuilder.Entity("w10_assignment_ksteph.Models.Abilities.Ability", b =>

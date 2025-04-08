@@ -2,8 +2,6 @@
 using w10_assignment_ksteph.Models.Abilities;
 using w10_assignment_ksteph.Models.UI;
 using w10_assignment_ksteph.Models.Units.Abstracts;
-using w10_assignment_ksteph.Models.Units.Characters;
-using w10_assignment_ksteph.Services;
 using W9_assignment_template.Data;
 
 namespace w10_assignment_ksteph;
@@ -12,14 +10,12 @@ public class GameEngine
 {
     private GameContext _db;
     private SeedHandler _seedHandler;
-    private DungeonFactory _dungeonFactory;
     private UserInterface _userInterface;
 
-    public GameEngine(GameContext db, SeedHandler seedHandler, UserInterface userInterface, DungeonFactory dungeonFactory)
+    public GameEngine(GameContext db, SeedHandler seedHandler, UserInterface userInterface)
     {
         _db = db;
         _seedHandler = seedHandler;
-        _dungeonFactory = dungeonFactory;
         _userInterface = userInterface;
     }
 
@@ -33,21 +29,11 @@ public class GameEngine
 
     void Test()
     {
-        List<Unit> units = _db.Units.ToList();
-        Unit unit = units.FirstOrDefault();
-        unit.Stat = new();
-        units.Remove(unit);
-        Unit unit2 = units.FirstOrDefault();
-        unit2.Stat = new();
-        units.Remove(unit2);
-        Ability heal = new HealAbility();
-        Ability taunt = new TauntAbility();
-        unit.Abilities.Add(heal);
-        unit2.Abilities.Add(taunt);
-        unit.UseAbility(unit2, heal);
-        //unit.Attack(unit2);
-        unit2.UseAbility(unit, heal);
-        unit2.UseAbility(unit, taunt);
+        Unit rogue = _db.Units.Where(u => u.Class == "Rogue").FirstOrDefault();
+        Unit target = _db.Units.FirstOrDefault();
+        Ability steal = _db.Abilities.Where(a => a.Units.Contains(rogue)).FirstOrDefault();
+        rogue.UseAbility(target, steal);
+        
     }
 
     public void Initialization()

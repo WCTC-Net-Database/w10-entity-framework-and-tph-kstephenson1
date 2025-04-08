@@ -33,7 +33,7 @@ namespace w10_assignment_ksteph.Migrations
 
                     b.HasIndex("UnitsUnitId");
 
-                    b.ToTable("AbilityUnit");
+                    b.ToTable("UnitAbility", (string)null);
                 });
 
             modelBuilder.Entity("w10_assignment_ksteph.Models.Abilities.Ability", b =>

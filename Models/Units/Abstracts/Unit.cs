@@ -84,8 +84,8 @@ public abstract class Unit : IUnit, ITargetable, IAttack, IHaveInventory
     [NotMapped]
     public virtual AbilityCommand AbilityCommand { get; set; } = null!;
 
-    public Stat Stat { get; set; }
-    public List<Ability> Abilities { get; set; } = new();
+    public virtual Stat Stat { get; set; }
+    public virtual List<Ability> Abilities { get; } = new();
 
     public Unit()
     {

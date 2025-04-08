@@ -19,7 +19,7 @@ public interface IUnit : ITargetable, IAttack, IHaveInventory, IUseItems
     public int Level { get; set; }
     Room? CurrentRoom { get; set; }
     public Stat Stat { get; set; }
-    public List<Ability> Abilities { get; set; }
+    public List<Ability> Abilities { get; }
 
     void Move();
     string GetHealthBar();

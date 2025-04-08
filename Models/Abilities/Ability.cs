@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using w10_assignment_ksteph.Models.Units.Abstracts;
 
 namespace w10_assignment_ksteph.Models.Abilities;
@@ -9,7 +10,7 @@ public abstract class Ability
     public abstract string AbilityType { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public virtual List<Unit> Units { get; set; }
+    public virtual List<Unit> Units { get; }
     public Ability()
     {
         
