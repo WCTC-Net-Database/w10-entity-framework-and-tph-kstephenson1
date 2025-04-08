@@ -1,13 +1,11 @@
-﻿using w10_assignment_ksteph.DataTypes;
+﻿using System.Threading.Tasks;
+using w10_assignment_ksteph.DataTypes;
 using w10_assignment_ksteph.Models.Abilities;
 using w10_assignment_ksteph.Models.Dungeons;
 using w10_assignment_ksteph.Models.Items;
-using w10_assignment_ksteph.Models.Items.WeaponItems;
 using w10_assignment_ksteph.Models.Rooms;
 using w10_assignment_ksteph.Models.Units.Abstracts;
-using w10_assignment_ksteph.Models.Units.Characters;
 using w10_assignment_ksteph.Services;
-using w10_assignment_ksteph.Services.DataHelpers;
 using W9_assignment_template.Data;
 
 namespace w10_assignment_ksteph.Data;
@@ -17,6 +15,11 @@ public class SeedHandler
     private GameContext _db;
     private RoomFactory _roomFactory;
     private UnitManager _unitManager;
+    private List<Room> _rooms = new();
+    private FlyAbility fly = new();
+    private HealAbility heal = new();
+    private StealAbility steal = new();
+    private TauntAbility taunt = new();
     public SeedHandler(GameContext context, RoomFactory roomFactory, UnitManager unitManager)
     {
         _db = context;
@@ -45,17 +48,24 @@ public class SeedHandler
             hallway.AddAdjacentRoom(dwelling2, Direction.West);
             hallway.AddAdjacentRoom(library, Direction.East);
             hallway.AddAdjacentRoom(dwelling, Direction.North);
-            List<Room> rooms = new();
-            rooms.AddRange<Room>(entrance, jail, kitchen, hallway, library, dwelling, dwelling2);
+            _rooms.AddRange<Room>(entrance, jail, kitchen, hallway, library, dwelling, dwelling2);
 
             dungeon.StartingRoom = entrance;
 
             _db.Dungeons.Add(dungeon);
 
-            foreach (Room room in rooms)
+            foreach (Room room in _rooms)
             {
                 _db.Rooms.Add(room);
             }
+        }
+
+        if (!_db.Abilities.Any())
+        {
+            _db.Abilities.Add(fly);
+            _db.Abilities.Add(heal);
+            _db.Abilities.Add(steal);
+            _db.Abilities.Add(taunt);
         }
 
         if (!_db.Units.Any())
@@ -72,8 +82,13 @@ public class SeedHandler
         _db.SaveChanges();
     }
 
-    private void AddToDb(Unit unit)
+    private async Task AddToDb(Unit unit)
     {
+        Random numberGenerator = new Random();
+        int random = numberGenerator.Next(0,7);
+        Room room = _rooms[random];
+        unit.CurrentRoom = room;
+
         _db.Units.Add(unit);
         _db.Stats.Add(unit.Stat);
         _db.Inventories.Add(unit.Inventory);
@@ -84,24 +99,16 @@ public class SeedHandler
         switch (unit.UnitType)
         {
             case "EnemyGhost":
-                Ability ability = new FlyAbility();
-                unit.Abilities.Add(ability);
-                _db.Abilities.Add(ability);
+                unit.Abilities.Add(fly);
                 break;
             case "Cleric" or "EnemyCleric":
-                ability = new HealAbility();
-                unit.Abilities.Add(ability);
-                _db.Abilities.Add(ability);
+                unit.Abilities.Add(heal);
                 break;
             case "EnemyGoblin" or "Knight":
-                ability = new TauntAbility();
-                unit.Abilities.Add(ability);
-                _db.Abilities.Add(ability);
+                unit.Abilities.Add(taunt);
                 break;
             case "Rogue":
-                ability = new StealAbility();
-                unit.Abilities.Add(ability);
-                _db.Abilities.Add(ability);
+                unit.Abilities.Add(steal);
                 break;
 
         }
